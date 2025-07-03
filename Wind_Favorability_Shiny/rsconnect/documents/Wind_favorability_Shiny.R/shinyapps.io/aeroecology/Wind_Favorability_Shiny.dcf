@@ -1,0 +1,13 @@
+name: Wind_Favorability_Shiny
+title: Wind_Favorability_Shiny
+username: aeroecology
+account: aeroecology
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 12248720
+bundleId: 10531632
+url: https://aeroecology.shinyapps.io/Wind_Favorability_Shiny/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Make_lat_lon_grid_template.R
