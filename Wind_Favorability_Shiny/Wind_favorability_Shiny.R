@@ -28,7 +28,7 @@ pdm$fallX <- cos(((90-pdm$pdmFall)/180)*pi)
 pdm$fallY <- sin(((90-pdm$pdmFall)/180)*pi)
 
 #Make template for main plot
-plot_it <- fav_means[,c("lon", "lat", "id")]
+plot_it <- Wind_fav_means[,c("lon", "lat", "id")]
 
 #Plot extent limits
 xmin = -124
@@ -36,8 +36,8 @@ xmax = -66
 ymin = 24
 ymax = 50
 
-meansRange <- c(min(fav_means[,12:ncol(fav_means)]), max(fav_means[,12:ncol(fav_means)]))
-sdRange <- c(min(fav_sd[,12:ncol(fav_means)]), max(fav_sd[,12:ncol(fav_means)]))
+meansRange <- c(min(Wind_fav_means[,12:ncol(Wind_fav_means)]), max(Wind_fav_means[,12:ncol(Wind_fav_means)]))
+sdRange <- c(min(Wind_fav_sd[,12:ncol(Wind_fav_means)]), max(Wind_fav_sd[,12:ncol(Wind_fav_means)]))
 
 #Size parameters for plot
 xyLabSize = 16
@@ -46,16 +46,16 @@ legendSize = 1.5
 arrow_scale = 3
 
 #designate info columns and data columns
-header_col <- which(!grepl("X", colnames(fav_means)))
-val_col <- which(grepl("X", colnames(fav_means)))
+header_col <- which(!grepl("X", colnames(Wind_fav_means)))
+val_col <- which(grepl("X", colnames(Wind_fav_means)))
 
 #list of all relevant dates
-val_col <- which(grepl("X", colnames(fav_means)))
-min_means <- min(fav_means[,val_col])
-max_means <- max(fav_means[,val_col])
-min_sd <- min(fav_sd[,val_col])
-max_sd <- max(fav_sd[,val_col])
-all_dates <- substr(colnames(fav_means)[val_col], start=2, stop = 5)
+val_col <- which(grepl("X", colnames(Wind_fav_means)))
+min_means <- min(Wind_fav_means[,val_col])
+max_means <- max(Wind_fav_means[,val_col])
+min_sd <- min(Wind_fav_sd[,val_col])
+max_sd <- max(Wind_fav_sd[,val_col])
+all_dates <- substr(colnames(Wind_fav_means)[val_col], start=2, stop = 5)
 dates1 <- seq.Date(as.Date("2021-03-01"), as.Date("2021-06-15"), by = "day")
 dates1 <- c(dates1, seq.Date(as.Date("2021-08-01"), as.Date("2021-11-15"), by = "day"))
 dates1 <- format(dates1, format= "%b %d")
@@ -160,8 +160,8 @@ server <- function(input, output, session) {
     # dateStart <- "0301"
     # dateEnd <- "0422"
     
-    col1 <- which(colnames(fav_means) == paste0("X", dateStart))
-    col2 <- which(colnames(fav_means) == paste0("X", dateEnd))
+    col1 <- which(colnames(Wind_fav_means) == paste0("X", dateStart))
+    col2 <- which(colnames(Wind_fav_means) == paste0("X", dateEnd))
     colStart = min(col1,col2)
     colEnd = max(col1, col2)
     
@@ -170,21 +170,21 @@ server <- function(input, output, session) {
     
     if(input$PlotType1 == "Means") {
       if(colStart==colEnd) {
-        row_means <- fav_means[,colStart]
+        row_means <- Wind_fav_means[,colStart]
       } else {
-        row_means <- rowMeans(fav_means[,colStart:colEnd])
+        row_means <- rowMeans(Wind_fav_means[,colStart:colEnd])
       }
       min_val=min_means; max_val=max_means
     } else {
       if(colStart==colEnd) {
-        row_means <- fav_sd[,colStart]
+        row_means <- Wind_fav_sd[,colStart]
       } else {
-        row_means <- rowMeans(fav_sd[,colStart:colEnd])
+        row_means <- rowMeans(Wind_fav_sd[,colStart:colEnd])
       }
       min_val=min_sd; max_val=max_sd
     }
     
-    dfp <- data.frame(id = fav_means$id, mean = row_means)  
+    dfp <- data.frame(id = Wind_fav_means$id, mean = row_means)  
     fav2 <- left_join(tiles, dfp, by = "id")
     #print(head(fav2))
     
@@ -270,8 +270,8 @@ server <- function(input, output, session) {
     # dateStart <- "0901"
     # dateEnd <- "0922"
     
-    col1 <- which(colnames(fav_means) == paste0("X", dateStart))
-    col2 <- which(colnames(fav_means) == paste0("X", dateEnd))
+    col1 <- which(colnames(Wind_fav_means) == paste0("X", dateStart))
+    col2 <- which(colnames(Wind_fav_means) == paste0("X", dateEnd))
     colStart = min(col1,col2)
     colEnd = max(col1, col2)
     
@@ -280,21 +280,21 @@ server <- function(input, output, session) {
     
     if(input$PlotType2 == "Means") {
       if(colStart==colEnd) {
-        row_means <- fav_means[,colStart]
+        row_means <- Wind_fav_means[,colStart]
       } else {
-        row_means <- rowMeans(fav_means[,colStart:colEnd])
+        row_means <- rowMeans(Wind_fav_means[,colStart:colEnd])
       }
       min_val=min_means; max_val=max_means
     } else {
       if(colStart==colEnd) {
-        row_means <- fav_sd[,colStart]
+        row_means <- Wind_fav_sd[,colStart]
       } else {
-        row_means <- rowMeans(fav_sd[,colStart:colEnd])
+        row_means <- rowMeans(Wind_fav_sd[,colStart:colEnd])
       }
       min_val=min_sd; max_val=max_sd
     }
     
-    dfp <- data.frame(id = fav_means$id, mean = row_means)  
+    dfp <- data.frame(id = Wind_fav_means$id, mean = row_means)  
     fav2 <- left_join(tiles, dfp, by = "id")
     #print(head(fav2))
     

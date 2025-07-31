@@ -24,8 +24,8 @@ gd$rand = runif(n=nrow(gd), 1, 10)
 t1 <- data.frame(id = fav_means$id, lon = fav_means$lon, lat =fav_means$lat)
 
 #Add in id and distance columns
-dg$id = 0
-dg$dist = 999
+gd$id = 0
+gd$dist = 999
 for(i in 1:nrow(gd)) {
   dist <- 
     row <- which.min((gd$x[i]-t1$lon)^2 + (gd$y[i]-t1$lat)^2)
@@ -41,7 +41,7 @@ gd$rand[which(gd$dist>0.15)] <- NA
 ggplot() +
   geom_tile(data = gd , aes(x = x, y = y, color = rand, fill = rand))
 
-#how many duuplicates (this counts NAs I think)
+#how many duplicates (this counts NAs I think)
 sum(duplicated(gd$id))
 nrow(gd)
 

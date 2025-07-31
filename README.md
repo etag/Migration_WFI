@@ -7,6 +7,9 @@ R scripts were run using R version 4.4.1.
 
 To replicate our analyses, we recommend working throught the R scripts described below in the order presented:
 
+WFI_drift_and_PDM.R 
+This script calculate preferred direciton of movement for each radar station using NEXRAD data archived here: http://doppler.cs.umass.edu/results/cajun_by_year/
+
 WFI_1_Get_NARR_Downloads.R
 This script downloads all NARR data necessary to calculate a wind favorabiliyt indices. The downloads take considerable time and disk space. Note that we useed and external hard drive for the data storage required by this script.
 

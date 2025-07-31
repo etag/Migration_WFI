@@ -6,7 +6,8 @@
 
 #This script opens NARR data from netcdf files stored on an eternal 
 #hard drive and generates & saves data frames for just the relevant data,
-#which includes surface level wind data.
+#which includes surface level wind data for spring (March 1 to June 15) 
+#and fall (August 1 to November 15).
 
 # Some library installs may be necessary
 # install.packages(c("ggplot2", "lubridate", "plyr", "reshape2", "scales",

@@ -9,18 +9,22 @@
 
 library(reshape2) 
 
-load("Wind_favorability_US_means.rds")
-m1 = Wind_fav_means_con
-rm(Wind_fav_means_con)
+load("Wind_favorability_Shiny/Wind_favorability_US_means.rds") #load data
+#Remove unused data and use shorter name for dataset
+# m1=fav_means[,-which(names(fav_means) %in% c("year", "lon", "id", "col_num", "row_num", "pLev", "land", "east", "central"))]
+load("Wind_favorability_US_means.rds") #load data
+m1 <- Wind_fav_means[,-which(names(Wind_fav_means) %in% c("year", "lon", "id", "col_num", "row_num", "pLev", "land", "east", "central"))]
+rm(Wind_fav_means_con) #remove unused version
+m1L <- reshape2::melt(m1, id.vars = c("lat", "flyway"), variable.name = "day") #convert to long format
 
-#Remove unneeded columns
-m1 = m1[,-which(names(m1) %in% c("year", "lon", "id", "col_num", "row_num", "pLev", "land", "east", "central"))]
-m1L <- reshape2::melt(m1, id.vars = c("lat", "flyway"), variable.name = "day")
-colnames(m1L)[1] = "seas"
+#generate a season column that will be filled with "spr" or "fal"
+colnames(m1L)[1] = "seas" 
 m1L$day <- as.numeric(substr(m1L$day, start = 2, stop = 5))
 m1L$seas[m1L$day < 715] = "spr"
 m1L$seas[m1L$day > 715] = "fal"
-m1L$seas <- as.factor(m1L$seas)
+m1L$seas <- as.factor(m1L$seas) #make this column a factor
+
+#Test for difference in means across seasons
 SeasTest1 = aov(value ~ seas + flyway + seas*flyway, data = m1L)
 summary(SeasTest1)
 TukeyHSD(SeasTest1, conf.level=.95)
@@ -35,8 +39,8 @@ meanFlySeas <- m1L %>%
 
 #Start over for latitude test
 load("Wind_favorability_US_means.rds")
-m1 = Wind_fav_means_con
-rm(Wind_fav_means_con)
+m1 <- Wind_fav_means[,-which(names(Wind_fav_means) %in% c("year", "lon", "id", "col_num", "row_num", "pLev", "land", "east", "central"))]
+rm(Wind_fav_means)
 #Assign data to southern and northern latitudinal bins for quick stats test
 m1 = m1 %>% mutate(lat = cut(lat, breaks = c(floor(min(m1$lat)),  40, ceiling(max(m1$lat)) )))
 #convert to long and test for latitudinal difference in spring
@@ -52,13 +56,11 @@ rm(m1LSpr, latTest1, m1L)
 
 #Start over for plotting favorability across months, season, flyway, and latitudes
 load("Wind_favorability_US_means.rds")
-m1 = Wind_fav_means_con
-rm(Wind_fav_means_con)
+m1 <- Wind_fav_means[,-which(names(Wind_fav_means) %in% c("year", "lon", "id", "col_num", "row_num", "pLev", "land", "east", "central"))]
+rm(Wind_fav_means)
 
 #Assign data to 1 degree latitudinal bins by rounding
 m1$lat = as.factor(round(m1$lat, 0))
-#Remove unneeded columns
-m1 = m1[,-which(names(m1) %in% c("year", "lon", "id", "col_num", "row_num", "pLev", "land", "east", "central"))]
 
 #convert to long
 m1L <- reshape2::melt(m1, id.vars = c("lat", "flyway"), variable.name = "day")
@@ -284,7 +286,7 @@ pdf(file = "Means_season_flyway_month_lattitude.pdf", width = 8, height = 10)
   grid.arrange(SPRE, FALE, SPRC, FALC, SPRW, FALW, SPRA, FALA , nrow = 4)
 dev.off()
 
-png(file = "Means_season_flyway_month_lattitude.png", width = 8, height = 10)
+png(file = "Means_season_flyway_month_lattitude.png", width = 8, height = 10, units="in", res=300)
 grid.arrange(SPRE, FALE, SPRC, FALC, SPRW, FALW, SPRA, FALA , nrow = 4)
 dev.off()
 

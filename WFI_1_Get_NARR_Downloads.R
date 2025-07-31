@@ -8,24 +8,24 @@
 #external hard drive
 
 #set working directory
-setwd("~/Documents/Rcode/NARR")
+setwd("~/Documents/Rcode/NARR/Migration_WFI/")
 
 #no libraries needed - all base R
 
 #Get all unique year and month combinations for 1995 to 2023
 #for getting monthly NARR files. Date range for spring is 
-#March to June. For fall - August to November.  
+#March to June 15. For fall - August to November 15.  
 years = as.character(1995:2024)
 months = c("03","04","05","06","08","09","10","11")
 downloads <- expand.grid(years, months)
 downloads <- paste0(downloads$Var1, downloads$Var2)
 downloads <- downloads[order(downloads)]
 
-#Establish lists of download locations
+#Establish lists of download URLs for vertical and horizontal wind components
 vURLs <- paste0("https://downloads.psl.noaa.gov/Datasets/NARR/pressure/vwnd.", downloads, ".nc")
 uURLs <- paste0("https://downloads.psl.noaa.gov/Datasets/NARR/pressure/uwnd.", downloads, ".nc")
 
-options(timeout=9000) #prevent download from terminating because of time
+options(timeout=9000) #prevent download from terminating because of timing out
 
 #establish list of file destination names for file downloads to external hard drive
 fnv <- paste0("/Volumes/MOON_EXT1/NARR_downloads/vwnd.",downloads,".nc")
